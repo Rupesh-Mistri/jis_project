@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payslip - Net ₹{{ summary.net_salary }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    .payslip {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border: 1px solid #ccc;
+    }
+    .header {
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .header img {
+      max-height: 50px;
+    }
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: right;
+    }
+    .info-table td {
+      padding: 5px 10px;
+      vertical-align: top;
+    }
+    .component-table {
+      margin-top: 20px;
+    }
+    .component-table th, .component-table td {
+      font-size: 14px;
+      text-align: left;
+      padding: 6px 10px;
+    }
+    .summary-table th {
+      background-color: #f0f0f0;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #666;
+    }
+    .company {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="payslip">
+  <div class="row header">
+    <div class="col-6">
+      <img src="{% static company.logo_url %}" alt="Company Logo">
+      <p class="mb-0"><span class="title">{{ company.name }}</span><br>
+        {{ company.address }}</p>
+    </div>
+    <div class="col-6 text-end title">
+      Payslip
+    </div>
+  </div>
+
+  <table class="table table-borderless info-table">
+    <tr>
+      <td><strong>Name:</strong> {{ employee.name }}</td>
+      <td><strong>PAN No:</strong> {{ employee.pan }}</td>
+    </tr>
+    <tr>
+      <td><strong>Month:</strong> {{ salary.month }}, Year: {{ salary.year }}</td>
+      <td><strong>PF No:</strong> {{ employee.pf_no }}</td>
+    </tr>
+    <tr>
+      <td><strong>Employee No:</strong> {{ employee.emp_no }}</td>
+      <td><strong>UAN No:</strong> {{ employee.uan_no }}</td>
+    </tr>
+    <tr>
+      <td><strong>Designation:</strong> {{ employee.designation }}</td>
+      <td><strong>LOP Days:</strong> {{ employee.lop_days }}</td>
+    </tr>
+    <tr>
+      <td><strong>Date of Joining:</strong> {{ employee.doj }}</td>
+      <td><strong>LOP Amt:</strong> ₹{{ employee.lop_amt }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">Leave Taken: {{ employee.leaves }} Paid Days: {{ employee.paid_days }}</td>
+    </tr>
+  </table>
+
+  <div class="row component-table">
+    <div class="col-6">
+      <table class="table table-bordered">
+        <thead>
+        <tr><th>Earnings Component</th><th>Amount (₹)</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>Basic</td><td>{{ salary.basic }}</td></tr>
+        <tr><td>HRA (40% of Basic)</td><td>{{ salary.hra }}</td></tr>
+        <tr><td>Conveyance</td><td>{{ salary.conveyance }}</td></tr>
+        <tr><td>Special Allowance</td><td>{{ salary.special_allowance }}</td></tr>
+        <tr><td>Bonus</td><td>{{ salary.bonus }}</td></tr>
+        <tr><td>Incentives</td><td>{{ salary.incentives }}</td></tr>
+        <tr><td>Arrears</td><td>{{ salary.arrears }}</td></tr>
+        <tr><td>Others</td><td>{{ salary.others }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="table table-bordered">
+        <thead>
+        <tr><th>Deductions Component</th><th>Amount (₹)</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>Provident Fund (12%)</td><td>{{ salary.pf }}</td></tr>
+        <tr><td>ESI (Employee Share)</td><td>{{ salary.esi }}</td></tr>
+        <tr><td>Professional Tax</td><td>{{ salary.professional_tax }}</td></tr>
+        <tr><td>Health Insurance</td><td>{{ salary.health_insurance }}</td></tr>
+        <tr><td>Income Tax (TDS)</td><td>{{ salary.tds }}</td></tr>
+        <tr><td>Other Deduction</td><td>{{ salary.other_deductions }}</td></tr>
+        <tr><td>Advance</td><td>{{ salary.advance }}</td></tr>
+        <tr><td>LOP</td><td>{{ salary.lop }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <table class="table table-bordered summary-table">
+    <tr>
+      <th>Monthly Gross</th>
+      <td>₹{{ summary.gross }}</td>
+      <th>Total Deduction</th>
+      <td>₹{{ summary.total_deductions }}</td>
+    </tr>
+    <tr>
+      <th>Employer PF (12%)</th>
+      <td>₹{{ summary.employer_pf }}</td>
+      <th>Employer ESI (3.25%)</th>
+      <td>₹{{ summary.employer_esi }}</td>
+    </tr>
+    <tr>
+      <th colspan="3">Net Salary (Gross - Total Deductions)</th>
+      <td><strong>₹{{ summary.net_salary }}</strong></td>
+    </tr>
+    <tr>
+      <th colspan="3">Parting Benefits (Payable on completion of service)</th>
+      <td>{{ summary.parting_benefits }}</td>
+    </tr>
+    <tr>
+      <td>Monthly</td><td>0</td><td>Consolidated</td><td>0</td>
+    </tr>
+    <tr>
+      <th colspan="3">Cost to Company</th>
+      <td><strong>₹{{ summary.ctc }}</strong></td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    Salary credited to your registered bank account on {{ summary.credited_date }}.<br>
+    This is a computer-generated payslip and does not require a physical signature.
+  </div>
+</div>
+
+</body>
+</html>
