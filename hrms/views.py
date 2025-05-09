@@ -17,7 +17,7 @@ def payslip(request):
     special_allowance = gross_salary - earnings_total_so_far
 
     # Deductions
-    pf_employee = round(basic * 0.12)
+    pf_employee = round(basic * 0.12) 
     esi_employee = round(gross_salary * 0.0075)
     other_deductions = 1050
     total_deductions = pf_employee + esi_employee + other_deductions
